@@ -116,6 +116,8 @@ export default function ProductPage() {
   const { productId } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('1 litre');
+  const [cartMessage, setCartMessage] = useState<string | null>(null);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   
   // Find the product data based on the URL parameter
   const product = productData[productId as string] || productData.groundnut;
@@ -129,6 +131,29 @@ export default function ProductPage() {
   
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
+  };
+
+  const addToCart = () => {
+    setIsAddingToCart(true);
+    
+    // Simulate API call or local storage update
+    setTimeout(() => {
+      // In a real app, you would update a cart state or context here
+      // For now, we'll just show a success message
+      setCartMessage(`${quantity} × ${product.name} (${selectedSize}) added to cart!`);
+      setIsAddingToCart(false);
+      
+      // Clear the message after 3 seconds
+      setTimeout(() => {
+        setCartMessage(null);
+      }, 3000);
+    }, 800);
+  };
+
+  const buyNow = () => {
+    addToCart();
+    // In a real app, you would redirect to checkout page
+    // window.location.href = '/checkout';
   };
 
   return (
@@ -189,16 +214,14 @@ export default function ProductPage() {
                     className={`size-option ${selectedSize === option.size ? 'selected' : ''}`}
                     onClick={() => setSelectedSize(option.size)}
                   >
-                    <div className="size-details">
-                      <div className="size-value">{option.size}</div>
-                      <div className="size-price">₹{option.price}</div>
-                      <div className="size-per-unit">{option.perUnit}</div>
-                      
-                      <div className="size-savings">
-                        <div className="mrp">MRP ₹{option.mrp}</div>
-                        <div className="discount">{option.discount} OFF</div>
-                        {option.saveAmount && <div className="save-amount">Save ₹{option.saveAmount}</div>}
-                      </div>
+                    <div className="size-value">{option.size}</div>
+                    <div className="size-price">₹{option.price}</div>
+                    <div className="size-per-unit">{option.perUnit}</div>
+                    
+                    <div className="size-savings">
+                      <div className="mrp">MRP ₹{option.mrp}</div>
+                      <div className="discount">{option.discount} OFF</div>
+                      {option.saveAmount && <div className="save-amount">Save ₹{option.saveAmount}</div>}
                     </div>
                     
                     {option.size === '1 litre' && <div className="best-choice">Best choice</div>}
@@ -213,26 +236,62 @@ export default function ProductPage() {
             </div>
             
             <div className="quantity-container">
+              <div className="quantity-selector">
+                <button 
+                  className="quantity-btn decrease" 
+                  onClick={decreaseQuantity}
+                  disabled={quantity <= 1}
+                >
+                  -
+                </button>
+                <span className="quantity-value">{quantity}</span>
+                <button 
+                  className="quantity-btn increase" 
+                  onClick={increaseQuantity}
+                >
+                  +
+                </button>
+              </div>
+              
               <button 
-                className="quantity-btn decrease" 
-                onClick={decreaseQuantity}
-                disabled={quantity <= 1}
+                className={`add-to-cart-btn ${isAddingToCart ? 'loading' : ''}`} 
+                onClick={addToCart}
+                disabled={isAddingToCart}
               >
-                -
-              </button>
-              <span className="quantity-value">{quantity}</span>
-              <button 
-                className="quantity-btn increase" 
-                onClick={increaseQuantity}
-              >
-                +
+                {isAddingToCart ? (
+                  <span className="loading-spinner"></span>
+                ) : (
+                  <>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 1.66666L2.5 5.83332V16.6667C2.5 17.1087 2.67559 17.5326 2.98816 17.8452C3.30072 18.1577 3.72464 18.3333 4.16667 18.3333H15.8333C16.2754 18.3333 16.6993 18.1577 17.0118 17.8452C17.3244 17.5326 17.5 17.1087 17.5 16.6667V5.83332L15 1.66666H5Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2.5 5.83334H17.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M13.3333 9.16666C13.3333 10.0507 12.9821 10.8986 12.357 11.5237C11.7319 12.1488 10.884 12.5 9.99999 12.5C9.11593 12.5 8.26809 12.1488 7.64297 11.5237C7.01785 10.8986 6.66666 10.0507 6.66666 9.16666" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Add to Cart
+                  </>
+                )}
               </button>
             </div>
             
-            <div className="action-buttons">
-              <button className="add-to-cart-btn">Add to Cart</button>
-              <button className="buy-now-btn">Buy Now</button>
-            </div>
+            <button className="whatsapp-btn" onClick={() => window.open('https://wa.me/+919999999999', '_blank')}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#25D366">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.72.045.419-.1.824z"/>
+              </svg>
+              Buy on WhatsApp
+            </button>
+            <div className="whatsapp-help">Difficulty placing an order?</div>
+            
+            {cartMessage && (
+              <div className="cart-message">
+                <div className="cart-message-content">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#234d20" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9 12L11 14L15 10" stroke="#234d20" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span>{cartMessage}</span>
+                </div>
+              </div>
+            )}
             
             <div className="payment-methods">
               <p>Secure and fast checkouts with</p>
@@ -504,7 +563,7 @@ export default function ProductPage() {
         }
         
         .size-selection h3 {
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 600;
           color: #333;
           margin: 0 0 5px 0;
@@ -514,11 +573,11 @@ export default function ProductPage() {
           font-size: 14px;
           color: #666;
           margin: 0 0 15px 0;
+          text-align: right;
         }
         
         .size-options {
           display: flex;
-          flex-direction: column;
           gap: 15px;
         }
         
@@ -528,46 +587,75 @@ export default function ProductPage() {
           padding: 15px;
           cursor: pointer;
           display: flex;
-          justify-content: space-between;
-          align-items: center;
+          flex-direction: column;
+          width: 170px;
           transition: all 0.2s ease;
           position: relative;
+          background: white;
         }
         
         .size-option.selected {
           border-color: #234d20;
-          background: rgba(35, 77, 32, 0.05);
+          background: white;
         }
         
-        .size-details {
+        .size-option.selected::after {
+          content: "✓";
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          width: 24px;
+          height: 24px;
+          background: #234d20;
+          color: white;
+          border-radius: 50%;
           display: flex;
-          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
         }
         
         .size-value {
           font-size: 18px;
           font-weight: 600;
-          color: #234d20;
+          color: #333;
         }
         
         .size-price {
-          font-size: 16px;
-          font-weight: 600;
+          font-size: 20px;
+          font-weight: 700;
           color: #333;
-          margin-top: 5px;
+          margin-top: 10px;
         }
         
         .size-per-unit {
-          font-size: 13px;
+          font-size: 14px;
           color: #666;
           margin-top: 2px;
         }
         
         .size-savings {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          flex-direction: column;
+          gap: 5px;
           margin-top: 8px;
+        }
+        
+        .mrp {
+          font-size: 14px;
+          color: #999;
+          text-decoration: line-through;
+        }
+        
+        .discount {
+          background: #e6f4ea;
+          color: #234d20;
+          font-size: 12px;
+          font-weight: 600;
+          padding: 3px 8px;
+          border-radius: 4px;
+          display: inline-block;
+          width: fit-content;
         }
         
         .save-amount {
@@ -577,12 +665,10 @@ export default function ProductPage() {
         }
         
         .best-choice {
-          background: #234d20;
-          color: white;
           font-size: 12px;
-          padding: 5px 10px;
-          border-radius: 6px;
-          font-weight: 500;
+          color: #234d20;
+          margin-top: 8px;
+          text-align: center;
         }
         
         .inventory-status {
@@ -593,8 +679,21 @@ export default function ProductPage() {
         }
         
         .stock-status {
-          color: #000;
-          font-weight: 600;
+          color: #234d20;
+          font-weight: 500;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        
+        .stock-status::before {
+          content: "";
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background: #234d20;
+          border-radius: 50%;
         }
         
         .sales-status {
@@ -606,13 +705,23 @@ export default function ProductPage() {
           display: flex;
           align-items: center;
           margin-bottom: 25px;
+          width: 100%;
+        }
+        
+        .quantity-selector {
+          display: flex;
+          align-items: center;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          background: #f9f9f9;
+          margin-right: 15px;
         }
         
         .quantity-btn {
           width: 40px;
           height: 40px;
-          border: 1px solid #e0e0e0;
-          background: white;
+          border: none;
+          background: transparent;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -620,18 +729,11 @@ export default function ProductPage() {
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s ease;
-        }
-        
-        .quantity-btn.decrease {
-          border-radius: 8px 0 0 8px;
-        }
-        
-        .quantity-btn.increase {
-          border-radius: 0 8px 8px 0;
+          color: #333;
         }
         
         .quantity-btn:hover {
-          background: #f5f5f5;
+          color: #234d20;
         }
         
         .quantity-btn:disabled {
@@ -640,27 +742,22 @@ export default function ProductPage() {
         }
         
         .quantity-value {
-          width: 60px;
+          width: 40px;
           height: 40px;
-          border-top: 1px solid #e0e0e0;
-          border-bottom: 1px solid #e0e0e0;
-          border-left: none;
-          border-right: none;
+          border: none;
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 600;
+          font-size: 16px;
         }
         
-        .action-buttons {
-          display: flex;
-          gap: 15px;
-          margin-bottom: 30px;
-        }
-        
-        .add-to-cart-btn, .buy-now-btn {
+        .add-to-cart-btn {
           flex: 1;
-          padding: 14px 20px;
+          height: 42px;
+          background: #234d20;
+          border: none;
+          color: white;
           border-radius: 8px;
           font-weight: 600;
           font-size: 16px;
@@ -669,26 +766,56 @@ export default function ProductPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-        }
-        
-        .add-to-cart-btn {
-          background: white;
-          border: 1px solid #234d20;
-          color: #234d20;
+          position: relative;
+          overflow: hidden;
         }
         
         .add-to-cart-btn:hover {
-          background: rgba(35, 77, 32, 0.05);
-        }
-        
-        .buy-now-btn {
-          background: #234d20;
-          border: 1px solid #234d20;
-          color: white;
-        }
-        
-        .buy-now-btn:hover {
           background: #1a3a18;
+        }
+        
+        .add-to-cart-btn svg {
+          margin-right: 8px;
+        }
+        
+        .add-to-cart-btn.loading {
+          background: #1a3a18;
+          color: transparent;
+          cursor: not-allowed;
+        }
+        
+        .whatsapp-btn {
+          width: 100%;
+          padding: 14px 20px;
+          background: #f0f0f0;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 16px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #333;
+          margin-bottom: 30px;
+        }
+        
+        .whatsapp-btn:hover {
+          background: #e5e5e5;
+        }
+        
+        .whatsapp-btn svg {
+          margin-right: 8px;
+          color: #25D366;
+        }
+        
+        .whatsapp-help {
+          text-align: center;
+          color: #666;
+          font-size: 13px;
+          margin-top: -20px;
+          margin-bottom: 30px;
         }
         
         .payment-methods {
@@ -902,6 +1029,46 @@ export default function ProductPage() {
           font-weight: 500;
           font-size: 13px;
           cursor: pointer;
+        }
+        
+        .cart-message {
+          position: fixed;
+          bottom: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 1000;
+          animation: slideUp 0.3s ease-out forwards;
+        }
+        
+        .cart-message-content {
+          background: white;
+          border-radius: 8px;
+          padding: 12px 20px;
+          box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          border-left: 4px solid #234d20;
+        }
+        
+        .cart-message svg {
+          flex-shrink: 0;
+        }
+        
+        .cart-message span {
+          color: #333;
+          font-weight: 500;
+        }
+        
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translate(-50%, 20px);
+          }
+          to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+          }
         }
         
         @media (max-width: 900px) {
