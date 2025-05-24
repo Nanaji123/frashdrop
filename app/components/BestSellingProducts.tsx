@@ -6,7 +6,7 @@ const products = [
     id: 1,
     slug: 'groundnut',
     name: 'Cold Pressed Groundnut Oil',
-    image: '/image/bottles.png',
+    image: '/image/ground.png',
     description: '100% Natural, traditionally wood-pressed oil',
     price: '₹490',
     originalPrice: '₹560',
@@ -18,7 +18,7 @@ const products = [
     id: 2,
     slug: 'coconut',
     name: 'Cold Pressed Coconut Oil',
-    image: '/image/bottles.png',
+    image: '/image/coco.png',
     description: 'Chemical-free, pure coconut goodness',
     price: '₹590',
     originalPrice: '₹650',
@@ -29,8 +29,8 @@ const products = [
   {
     id: 3,
     slug: 'safflower',
-    name: 'Cold Pressed Safflower Oil',
-    image: '/image/bottles.png',
+    name: 'Cold Pressed sesame Oil',
+    image: '/image/sesame.png',
     description: '100% Natural, high in essential nutrients',
     price: '₹650',
     originalPrice: '₹750',
@@ -178,13 +178,13 @@ export default function BestSellingProducts() {
         
         .product-image {
           position: relative;
-          height: 180px;
+          height: 300px;
           overflow: hidden;
         }
         
         .product-image img {
           width: 100%;
-          height: 100%;
+          height: 400px;
           object-fit: cover;
           transition: transform 0.3s ease;
         }
@@ -304,13 +304,13 @@ export default function BestSellingProducts() {
           font-weight: 600;
           font-size: 14px;
           text-decoration: none;
-          border-bottom: 2px solid #234d20;
+          border-bottom: none;
           padding-bottom: 2px;
-          transition: border-color 0.2s;
+          transition: color 0.2s;
         }
         
         .view-all a:hover {
-          border-color: #1c3d19;
+          color: #1c3d19;
         }
         
         @media (max-width: 900px) {

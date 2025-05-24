@@ -1,11 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
   return (
     <header className="navbar">
@@ -16,21 +21,29 @@ export default function Navbar() {
         <span className="brand-name">RigVedha Organics</span>
       </div>
       
-      <nav className="nav-links">
-        <Link href="/" className={pathname === '/' ? 'nav-link active' : 'nav-link'}>
-          <span style={{ color: '#000', fontWeight:400 }}>Home</span>
+      <div className="mobile-menu-button" onClick={toggleMobileMenu}>
+        <div className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      
+      <nav className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+        <Link href="/" className={pathname === '/' ? 'nav-link active' : 'nav-link'} style={{ textDecoration: 'none', borderBottom: 'none' }}>
+          <span style={{ color: pathname === '/' ? '#26a65b' : '#000', fontWeight:400 }}>Home</span>
         </Link>
-        <Link href="/shop" className={pathname === '/shop' ? 'nav-link active' : 'nav-link'}>
-          <span style={{ color: '#000', fontWeight:400 }}>Shop</span>
+        <Link href="/shop" className={pathname === '/shop' ? 'nav-link active' : 'nav-link'} style={{ textDecoration: 'none', borderBottom: 'none' }}>
+          <span style={{ color: pathname === '/shop' ? '#26a65b' : '#000', fontWeight:400 }}>Shop</span>
         </Link>
-        <Link href="/process" className={pathname === '/process' ? 'nav-link active' : 'nav-link'}>
-          <span style={{ color: '#000', fontWeight:400 }}>Our Process</span>
+        <Link href="/process" className={pathname === '/process' ? 'nav-link active' : 'nav-link'} style={{ textDecoration: 'none', borderBottom: 'none' }}>
+          <span style={{ color: pathname === '/process' ? '#26a65b' : '#000', fontWeight:400 }}>Our Process</span>
         </Link>
-        <Link href="/benefits" className={pathname === '/benefits' ? 'nav-link active' : 'nav-link'}>
-          <span style={{ color: '#000', fontWeight:400 }}>Benefits</span>
+        <Link href="/benefits" className={pathname === '/benefits' ? 'nav-link active' : 'nav-link'} style={{ textDecoration: 'none', borderBottom: 'none' }}>
+          <span style={{ color: pathname === '/benefits' ? '#26a65b' : '#000', fontWeight:400 }}>Benefits</span>
         </Link>
-        <Link href="/about" className={pathname === '/about' ? 'nav-link active' : 'nav-link'}>
-          <span style={{ color: '#000', fontWeight:400 }}>Our Story</span>
+        <Link href="/about" className={pathname === '/about' ? 'nav-link active' : 'nav-link'} style={{ textDecoration: 'none', borderBottom: 'none' }}>
+          <span style={{ color: pathname === '/about' ? '#26a65b' : '#000', fontWeight:400 }}>Our Story</span>
         </Link>
       </nav>
 
@@ -94,30 +107,68 @@ export default function Navbar() {
           font-family: 'Poppins', sans-serif;
         }
         
+        .mobile-menu-button {
+          display: none;
+          cursor: pointer;
+          z-index: 101;
+        }
+        
+        .hamburger {
+          width: 24px;
+          height: 20px;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        
+        .hamburger span {
+          display: block;
+          height: 2px;
+          width: 100%;
+          background-color: #234d20;
+          border-radius: 2px;
+          transition: all 0.3s ease;
+        }
+        
+        .hamburger.open span:nth-child(1) {
+          transform: translateY(9px) rotate(45deg);
+        }
+        
+        .hamburger.open span:nth-child(2) {
+          opacity: 0;
+        }
+        
+        .hamburger.open span:nth-child(3) {
+          transform: translateY(-9px) rotate(-45deg);
+        }
+        
         .nav-links {
           display: flex;
           gap: 32px;
         }
         
+        .nav-links a {
+          text-decoration: none !important;
+          border-bottom: none !important;
+        }
+        
         .nav-link {
-          text-decoration: none;
+          text-decoration: none !important;
           padding: 5px 0;
           position: relative;
+          outline: none;
+          border-bottom: none !important;
+        }
+        
+        .nav-link:focus {
+          outline: none;
+          border-bottom: none !important;
+          text-decoration: none !important;
         }
         
         .nav-link.active span {
           color: #26a65b !important;
-        }
-        
-        .nav-link.active::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 2px;
-          background-color: #26a65b;
-          border-radius: 2px;
         }
         
         .nav-actions {
@@ -178,11 +229,45 @@ export default function Navbar() {
         
         @media (max-width: 768px) {
           .nav-links {
-            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(249, 247, 242, 0.98);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            padding: 60px 20px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 100;
+          }
+          
+          .nav-links.mobile-open {
+            transform: translateX(0);
+          }
+          
+          .mobile-menu-button {
+            display: block;
+          }
+          
+          .nav-link {
+            font-size: 20px;
           }
           
           .navbar {
             padding: 12px 4vw;
+          }
+          
+          .login-button {
+            padding: 6px 16px;
+            font-size: 12px;
+          }
+          
+          .brand-name {
+            font-size: 18px;
           }
         }
       `}</style>

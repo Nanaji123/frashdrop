@@ -495,18 +495,19 @@ export default function HomePage() {
         /* Responsive Adjustments */
         @media (max-width: 1200px) {
           .hero-text h1 {
-            font-size: 48px;
+            font-size: 42px;
           }
           
           .hero-image img {
-            width: 450px;
+            width: 400px;
           }
         }
         
         @media (max-width: 992px) {
           .hero-section {
             height: auto;
-            padding: 80px 0;
+            padding: 60px 0;
+            min-height: auto;
           }
           
           .hero-content {
@@ -519,6 +520,8 @@ export default function HomePage() {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-right: 0;
+            min-width: 100%;
           }
           
           .hero-buttons {
@@ -527,6 +530,14 @@ export default function HomePage() {
           
           .trust-indicators {
             margin: 0 auto;
+            max-width: 100%;
+          }
+          
+          .hero-image {
+            margin-left: 0;
+            margin-top: 40px;
+            min-width: 100%;
+            justify-content: center;
           }
         }
         
@@ -540,7 +551,62 @@ export default function HomePage() {
           }
           
           .hero-image img {
-            width: 350px;
+            width: 320px;
+          }
+          
+          .hero-buttons {
+            flex-direction: column;
+            width: 100%;
+            max-width: 300px;
+          }
+          
+          .trusted-by-logos {
+            gap: 20px;
+          }
+          
+          .logo-card {
+            width: calc(50% - 10px);
+          }
+          
+          .trust-indicators {
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+          }
+          
+          .customer-avatars {
+            justify-content: center;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .hero-text h1 {
+            font-size: 32px;
+          }
+          
+          .hero-text p {
+            font-size: 15px;
+          }
+          
+          .hero-image img {
+            width: 280px;
+          }
+          
+          .logo-card {
+            width: 100%;
+          }
+          
+          .hero-section {
+            padding: 40px 0;
+          }
+          
+          .trusted-by-section {
+            padding: 60px 20px;
+          }
+          
+          .badge {
+            font-size: 12px;
+            padding: 6px 14px;
           }
         }
       `}</style>

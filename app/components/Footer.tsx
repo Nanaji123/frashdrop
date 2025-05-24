@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="footer-about">
             <div className="footer-logo">
               <div className="logo-circle">
-                <img src="/images/logo.png" alt="RigVedha Logo" className="logo" />
+                <img src="/image/logo.png" alt="RigVedha Logo" className="logo" />
               </div>
               <span className="brand-name">RigVedha Organics</span>
             </div>
@@ -20,19 +20,19 @@ const Footer = () => {
               preserving natural goodness and nutritional benefits.
             </p>
             <div className="social-links">
-              <a href="#" className="social-link">
+              <a href="#" className="social-link" style={{ textDecoration: 'none', borderBottom: 'none' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                 </svg>
               </a>
-              <a href="#" className="social-link">
+              <a href="#" className="social-link" style={{ textDecoration: 'none', borderBottom: 'none' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                 </svg>
               </a>
-              <a href="#" className="social-link">
+              <a href="#" className="social-link" style={{ textDecoration: 'none', borderBottom: 'none' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
                 </svg>
@@ -44,32 +44,32 @@ const Footer = () => {
             <div className="footer-links">
               <h3 className="footer-heading">Quick Links</h3>
               <ul className="link-list">
-                <li><Link href="/">Home</Link></li>
-                <li><Link href="/shop">Shop</Link></li>
-                <li><Link href="/process">Our Process</Link></li>
-                <li><Link href="/benefits">Benefits</Link></li>
-                <li><Link href="/about">Our Story</Link></li>
+                <li><Link href="/" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Home</Link></li>
+                <li><Link href="/shop" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Shop</Link></li>
+                <li><Link href="/process" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Our Process</Link></li>
+                <li><Link href="/benefits" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Benefits</Link></li>
+                <li><Link href="/about" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Our Story</Link></li>
               </ul>
             </div>
             
             <div className="footer-links">
               <h3 className="footer-heading">Products</h3>
               <ul className="link-list">
-                <li><Link href="/shop">Cold Pressed Oils</Link></li>
-                <li><Link href="/shop">Gift Sets</Link></li>
-                <li><Link href="/shop">Organic Seeds</Link></li>
-                <li><Link href="/shop">Special Offers</Link></li>
+                <li><Link href="/shop" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Cold Pressed Oils</Link></li>
+                <li><Link href="/shop" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Gift Sets</Link></li>
+                <li><Link href="/shop" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Organic Seeds</Link></li>
+                <li><Link href="/shop" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Special Offers</Link></li>
               </ul>
             </div>
             
             <div className="footer-links">
               <h3 className="footer-heading">Support</h3>
               <ul className="link-list">
-                <li><Link href="/login">My Account</Link></li>
-                <li><a href="#">Shipping Policy</a></li>
-                <li><a href="#">Return Policy</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms & Conditions</a></li>
+                <li><Link href="/login" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>My Account</Link></li>
+                <li><a href="#" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Shipping Policy</a></li>
+                <li><a href="#" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Return Policy</a></li>
+                <li><a href="#" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Privacy Policy</a></li>
+                <li><a href="#" style={{ textDecoration: 'none', borderBottom: 'none', color: '#000000' }}>Terms & Conditions</a></li>
               </ul>
             </div>
           </div>
@@ -173,6 +173,7 @@ const Footer = () => {
           background-color: #ecf3e8;
           color: #234d20;
           transition: all 0.3s ease;
+          text-decoration: none;
         }
         
         .social-link:hover {
@@ -194,7 +195,7 @@ const Footer = () => {
         }
         
         .footer-heading {
-          color: #234d20;
+          color: #000000;
           font-weight: 600;
           font-size: 16px;
           margin-bottom: 20px;
@@ -211,14 +212,23 @@ const Footer = () => {
         }
         
         .link-list a {
-          color: #555;
-          text-decoration: none;
+          color: #000000;
+          text-decoration: none !important;
           font-size: 14px;
           transition: color 0.2s;
+          border-bottom: none !important;
         }
         
         .link-list a:hover {
           color: #234d20;
+          text-decoration: none !important;
+          border-bottom: none !important;
+        }
+        
+        /* Remove underlines from all links in footer */
+        .footer a {
+          text-decoration: none !important;
+          border-bottom: none !important;
         }
         
         .newsletter {
@@ -321,3 +331,4 @@ const Footer = () => {
 };
 
 export default Footer; 
+ 

@@ -1,525 +1,567 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function FarmToBottleProcess() {
+  const stepsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Define the process steps
   const processSteps = [
     {
-      icon: '🌱',
-      title: 'Seed Selection',
-      description: 'We select only premium organic seeds, rejecting 30% that don\'t meet our standards. Our experts hand-pick each batch to ensure superior quality.',
-      image: '/image/bottles.png'
+      title: "Farm Fresh Ingredients",
+      description: "We source our seeds directly from organic farms where they are grown without pesticides or chemicals, ensuring maximum nutritional value. Our partner farmers use sustainable agriculture practices that preserve soil health and biodiversity while growing the highest quality oilseeds.",
+      image: "/image/pic2.jpg",
+      icon: "🌱",
+      color: "#10b981",
+      bgGradient: "linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2))"
     },
     {
-      icon: '🌾',
-      title: 'Organic Farming',
-      description: 'Partner farmers grow crops using traditional methods without chemicals or pesticides. We prioritize sustainable farming practices that respect nature and local ecosystems.',
-      image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=580&auto=format&fit=crop'
+      title: "Traditional Wood Pressing",
+      description: "Using age-old techniques, our oils are extracted using wooden ghani presses, which maintain low temperatures and preserve natural nutrients. This ancient method, passed down through generations, ensures that no heat damage occurs during extraction, maintaining all the beneficial compounds, antioxidants and vitamins.",
+      image: "/image/1pic.jpg",
+      icon: "🪵",
+      color: "#f59e0b",
+      bgGradient: "linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2))"
     },
     {
-      icon: '🪵',
-      title: 'Wood Pressing',
-      description: 'Cold-pressed at less than 45°C in wooden ghanis to preserve nutrients and natural flavor. This ancient technique ensures maximum retention of natural goodness.',
-      image: '/image/bottles.png'
+      title: "Zero Chemical Processing",
+      description: "Unlike commercial oils, we don't use chemicals, heat, or refining processes that strip away the natural goodness of our oils. Our oils retain their natural color, aroma, and nutritional profile. This means you get all the natural vitamins, minerals, and essential fatty acids exactly as nature intended.",
+      image: "/image/logo.png",
+      icon: "✨",
+      color: "#6366f1",
+      bgGradient: "linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(79, 70, 229, 0.2))"
     },
     {
-      icon: '🔍',
-      title: 'Quality Testing',
-      description: '17 rigorous lab tests ensure purity, with scan-to-verify reports accessible on each bottle. Our standards exceed industry requirements for the purest possible product.',
-      image: 'https://images.unsplash.com/photo-1579154341098-e4e158cc7f55?q=80&w=580&auto=format&fit=crop'
-    },
-    {
-      icon: '🧪',
-      title: 'Zero Additives',
-      description: 'No chemicals, preservatives, or processing aids - just pure, natural oil. We believe in delivering the authentic taste and benefits exactly as nature intended.',
-      image: 'https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?q=80&w=580&auto=format&fit=crop'
-    },
-    {
-      icon: '🍶',
-      title: 'Glass Bottling',
-      description: 'Packaged in premium glass bottles to maintain freshness and prevent contamination. Our environmentally friendly packaging preserves quality and reduces plastic waste.',
-      image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=580&auto=format&fit=crop'
+      title: "Quality Testing & Packaging",
+      description: "Each batch is tested for purity before being packaged in UV-protected glass bottles to maintain freshness and nutritional integrity. Our rigorous quality control ensures that every bottle meets our strict standards. We use amber glass bottles that protect the oil from light degradation, preserving its shelf life naturally without preservatives.",
+      image: "/image/bottles.png",
+      icon: "🧪",
+      color: "#ec4899",
+      bgGradient: "linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(219, 39, 119, 0.2))"
     }
   ];
-  
-  const timelineRef = useRef<HTMLDivElement>(null);
-  
+
+  // Check if device is mobile
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animated');
-        }
-      });
-    }, { threshold: 0.1 });
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
     
-    const timeline = timelineRef.current;
-    if (timeline) {
-      const steps = timeline.querySelectorAll('.process-step') as NodeListOf<HTMLElement>;
-      steps.forEach((step: HTMLElement) => {
-        observer.observe(step);
-      });
-      
-      const line = timeline.querySelector('.timeline-line') as HTMLElement;
-      if (line) observer.observe(line);
-    }
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
     
-    return () => {
-      if (timeline) {
-        const steps = timeline.querySelectorAll('.process-step') as NodeListOf<HTMLElement>;
-        steps.forEach((step: HTMLElement) => {
-          observer.unobserve(step);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Animation observer for steps
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+          }
         });
-        
-        const line = timeline.querySelector('.timeline-line') as HTMLElement;
-        if (line) observer.unobserve(line);
-      }
+      },
+      { threshold: 0.1 }
+    );
+
+    stepsRef.current.forEach((step) => {
+      if (step) observer.observe(step);
+    });
+
+    return () => {
+      stepsRef.current.forEach((step) => {
+        if (step) observer.unobserve(step);
+      });
     };
   }, []);
 
   return (
-    <section className="process-section">
-      <div className="container">
+    <div className="farm-to-bottle-container">
+      <div className="farm-to-bottle-inner">
+        {/* Section Header */}
         <div className="section-header">
-          <h2>Our Farm-to-Bottle Journey</h2>
-          <p>From seed selection to bottling, discover how we preserve nutrition and tradition</p>
+          <h3>Our Process</h3>
+          <h1>From Farm to Bottle: The RigVedha Process</h1>
+          <p>
+            We carefully preserve the traditional wood-pressed oil extraction methods to deliver
+            pure, nutrient-rich oils without compromising on quality or authenticity.
+          </p>
         </div>
 
-        <div className="process-roadmap" ref={timelineRef}>
-          <div className="timeline-line">
-            <div className="glow-point start"></div>
-            <div className="glow-point end"></div>
-          </div>
-          
-          {processSteps.map((step, idx) => (
-            <div key={idx} className={`process-step ${idx % 2 === 0 ? 'left' : 'right'}`} data-step={idx + 1}>
-              <div className="timeline-dot">
-                <div className="dot-pulse"></div>
-              </div>
-              
-              <div className="process-content">
-                <div className="step-number">{idx + 1}</div>
-                <div className="step-image">
-                  <img src={step.image} alt={step.title} />
-                  <div className="step-icon">{step.icon}</div>
+        {/* Process Steps */}
+        <div className="process-steps">
+          {processSteps.map((step, index) => (
+            <div
+              key={index}
+              ref={(el) => {
+                stepsRef.current[index] = el;
+                return undefined;
+              }}
+              data-step={index}
+              style={{
+                opacity: '0',
+                transform: 'translateY(80px)',
+                transition: 'all 1s ease',
+                display: 'flex',
+                flexDirection: isMobile ? 'column' : (index % 2 === 0 ? 'row' : 'row-reverse'),
+                alignItems: 'center',
+                gap: isMobile ? '48px' : '80px'
+              }}
+              className="process-step"
+            >
+              {/* Content Side */}
+              <div style={{
+                flex: '1',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '32px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '32px',
+                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                    transform: 'scale(1)',
+                    transition: 'transform 0.3s ease',
+                    backgroundColor: step.color + '20',
+                    color: step.color,
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (e.target instanceof HTMLElement) {
+                      e.target.style.transform = 'scale(1.1)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (e.target instanceof HTMLElement) {
+                      e.target.style.transform = 'scale(1)';
+                    }
+                  }}
+                  >
+                    {step.icon}
+                  </div>
+                  <div style={{
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    color: '#6b7280',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>
+                    Step {index + 1} of {processSteps.length}
+                  </div>
                 </div>
-                <div className="step-details">
-                  <h3>{step.title}</h3>
-                  <p>{step.description}</p>
+
+                <div>
+                  <h2 style={{
+                    fontSize: '2.5rem',
+                    fontWeight: 'bold',
+                    color: '#111827',
+                    marginBottom: '16px',
+                    lineHeight: '1.2'
+                  }}>
+                    {step.title}
+                  </h2>
+                  <p style={{
+                    fontSize: '1.125rem',
+                    color: '#4b5563',
+                    lineHeight: '1.7',
+                    maxWidth: '600px'
+                  }}>
+                    {step.description}
+                  </p>
+                </div>
+
+                {/* Progress Indicator */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  {processSteps.map((_, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        height: '8px',
+                        borderRadius: '4px',
+                        transition: 'all 0.5s ease',
+                        width: i === index ? '40px' : '20px',
+                        background: i <= index ? 'linear-gradient(135deg, #22c55e, #10b981)' : '#e5e7eb'
+                      }}
+                    ></div>
+                  ))}
+                </div>
+
+                {/* Quality Badge */}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: 'white',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '50px',
+                  padding: '8px 16px',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    background: '#22c55e',
+                    borderRadius: '50%'
+                  }}></div>
+                  <span style={{
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    color: '#374151'
+                  }}>Premium Quality Assured</span>
+                </div>
+              </div>
+
+              {/* Image Side */}
+              <div style={{ flex: '1', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div style={{ position: 'relative', padding: '15px', width: '100%', maxWidth: '400px', display: 'flex', justifyContent: 'center' }} className="image-container">
+                  {/* Floating Background */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: '0',
+                    background: step.bgGradient,
+                    borderRadius: '24px',
+                    filter: 'blur(32px)',
+                    transition: 'all 0.5s ease',
+                    opacity: '0.6',
+                    zIndex: 0
+                  }} className="floating-bg"></div>
+                  
+                  {/* Main Image Container */}
+                  <div style={{
+                    position: 'relative',
+                    background: 'white',
+                    borderRadius: '24px',
+                    overflow: 'hidden',
+                    boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
+                    transition: 'all 0.5s ease',
+                    transform: 'translateY(0)',
+                    zIndex: 1,
+                    width: '320px',
+                    height: '320px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }} className="main-image">
+                    <div style={{
+                      width: '90%',
+                      height: '90%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={step.image}
+                        alt={step.title}
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '100%',
+                          objectFit: 'contain',
+                          transition: 'transform 0.7s ease'
+                        }}
+                        className="step-image"
+                      />
+                    </div>
+                    
+                    {/* Image Overlay */}
+                    <div style={{
+                      position: 'absolute',
+                      inset: '0',
+                      background: 'linear-gradient(to top, rgba(0,0,0,0.05), transparent)',
+                      zIndex: 2
+                    }}></div>
+                    
+                    {/* Step Number */}
+                    <div style={{
+                      position: 'absolute',
+                      top: '24px',
+                      right: '24px',
+                      width: '48px',
+                      height: '48px',
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      backdropFilter: 'blur(8px)',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '18px',
+                      fontWeight: 'bold',
+                      color: '#1f2937',
+                      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                      zIndex: 3
+                    }}>
+                      {index + 1}
+                    </div>
+                  </div>
+
+                  {/* Decorative Elements */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '-10px',
+                    left: '-10px',
+                    width: '120px',
+                    height: '120px',
+                    background: 'linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(16, 185, 129, 0.15))',
+                    borderRadius: '50%',
+                    filter: 'blur(40px)',
+                    zIndex: 0
+                  }}></div>
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '-10px',
+                    right: '-10px',
+                    width: '150px',
+                    height: '150px',
+                    background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15))',
+                    borderRadius: '50%',
+                    filter: 'blur(40px)',
+                    zIndex: 0
+                  }}></div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        
-        <div className="cta-container">
-          <a href="/process" className="cta-button">
-            Learn More About Our Process
-          </a>
+
+        {/* Call to Action */}
+        <div style={{ textAlign: 'center', marginTop: '128px' }}>
+          <div style={{ display: 'inline-block' }}>
+            <button style={{
+              position: 'relative',
+              padding: '16px 32px',
+              background: 'linear-gradient(135deg, #059669, #10b981)',
+              color: 'white',
+              fontWeight: '600',
+              borderRadius: '16px',
+              boxShadow: '0 10px 25px rgba(16, 185, 129, 0.3)',
+              transition: 'all 0.3s ease',
+              transform: 'translateY(0)',
+              overflow: 'hidden',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '16px'
+            }}
+            className="cta-button"
+            onMouseEnter={(e) => {
+              if (e.target instanceof HTMLElement) {
+                e.target.style.transform = 'translateY(-4px)';
+                e.target.style.boxShadow = '0 15px 35px rgba(16, 185, 129, 0.4)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (e.target instanceof HTMLElement) {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 10px 25px rgba(16, 185, 129, 0.3)';
+              }
+            }}
+            >
+              <span style={{ position: 'relative', zIndex: '10' }}>
+                Explore Our Complete Process
+              </span>
+              <div style={{
+                position: 'absolute',
+                inset: '0',
+                background: 'linear-gradient(135deg, #047857, #059669)',
+                opacity: '0',
+                transition: 'opacity 0.3s ease'
+              }} className="button-overlay"></div>
+            </button>
+          </div>
         </div>
       </div>
 
       <style jsx>{`
-        .process-section {
-          background: linear-gradient(to bottom, #f9f8f4, #f2f7ee);
-          padding: 70px 0;
-          position: relative;
-          overflow: hidden;
+        .farm-to-bottle-container {
+          padding: 120px 5vw;
+          background-color: #fafafa;
+          background-image: 
+            radial-gradient(circle at 20% 90%, rgba(249, 242, 226, 0.4) 0%, transparent 20%),
+            radial-gradient(circle at 80% 20%, rgba(242, 248, 237, 0.4) 0%, transparent 20%);
         }
         
-        .container {
-          max-width: 1200px;
+        .farm-to-bottle-inner {
+          max-width: 1300px;
           margin: 0 auto;
-          padding: 0 30px;
-          position: relative;
         }
         
         .section-header {
           text-align: center;
-          margin-bottom: 60px;
-        }
-        
-        .section-header h2 {
-          font-size: 36px;
-          font-weight: 700;
-          color: #234d20;
-          margin-bottom: 14px;
-          font-family: 'Playfair Display', serif;
-        }
-        
-        .section-header p {
-          font-size: 17px;
-          color: #555;
-          margin: 0 auto;
-          max-width: 700px;
-          line-height: 1.6;
-        }
-        
-        .process-roadmap {
+          margin-bottom: 100px;
           position: relative;
-          padding: 20px 0;
-          min-height: 800px;
         }
         
-        .timeline-line {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 50%;
-          width: 4px;
-          background: linear-gradient(to bottom, rgba(38, 166, 91, 0.2), rgba(35, 77, 32, 0.2));
-          transform: translateX(-50%);
-          border-radius: 4px;
-          z-index: 1;
-          overflow: hidden;
-          opacity: 0;
-          transition: opacity 1s ease;
-        }
-        
-        .timeline-line.animated {
-          opacity: 1;
-        }
-        
-        .glow-point {
-          position: absolute;
-          width: 100%;
-          height: 120px;
-          background: linear-gradient(to bottom, 
-            rgba(38, 166, 91, 0) 0%,
-            rgba(38, 166, 91, 1) 50%,
-            rgba(38, 166, 91, 0) 100%);
-          opacity: 0;
-          animation: glowMovement 10s infinite;
-          animation-play-state: paused;
-          will-change: transform, opacity;
-        }
-        
-        .timeline-line.animated .glow-point {
-          animation-play-state: running;
-        }
-        
-        .glow-point.start {
-          top: -120px;
-          animation-delay: 0s;
-        }
-        
-        .glow-point.end {
-          top: -120px;
-          animation-delay: 5s;
-        }
-        
-        @keyframes glowMovement {
-          0% {
-            top: -120px;
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
-          }
-          100% {
-            top: 100%;
-            opacity: 0;
-          }
-        }
-        
-        .process-step {
-          position: relative;
-          margin-bottom: 55px;
-          width: 100%;
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        
-        .process-step.animated {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        
-        .process-step:last-child {
-          margin-bottom: 0;
-        }
-        
-        .timeline-dot {
-          position: absolute;
-          width: 20px;
-          height: 20px;
-          background: #26a65b;
-          border-radius: 50%;
-          left: 50%;
-          top: 90px;
-          transform: translateX(-50%);
-          z-index: 2;
-          box-shadow: 0 0 0 4px rgba(38, 166, 91, 0.2);
-        }
-        
-        .dot-pulse {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: rgba(38, 166, 91, 0.5);
-          opacity: 0;
-          transform: scale(1);
-        }
-        
-        .process-step.animated .dot-pulse {
-          animation: pulse 3s infinite;
-          animation-delay: calc(0.5s * var(--step-index));
-        }
-        
-        @keyframes pulse {
-          0% {
-            transform: scale(1);
-            opacity: 0.5;
-          }
-          100% {
-            transform: scale(2.5);
-            opacity: 0;
-          }
-        }
-        
-        .process-content {
-          display: flex;
-          flex-direction: column;
-          background: white;
-          border-radius: 10px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-          overflow: hidden;
-          position: relative;
-          width: 48%;
-          min-height: 190px;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          border-left: none;
-          border-right: none;
-        }
-        
-        .process-step.left .process-content {
-          margin-right: auto;
-          border-top-right-radius: 30px;
-          border-bottom-right-radius: 30px;
-          border-left: 4px solid #234d20;
-        }
-        
-        .process-step.right .process-content {
-          margin-left: auto;
-          border-top-left-radius: 30px;
-          border-bottom-left-radius: 30px;
-          border-right: 4px solid #234d20;
-        }
-        
-        .process-content:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-        }
-        
-        .step-number {
-          position: absolute;
-          width: 42px;
-          height: 42px;
-          background: linear-gradient(135deg, #26a65b, #234d20);
-          color: white;
-          font-weight: 700;
-          font-size: 18px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 2;
-          top: -16px;
-          box-shadow: 0 6px 15px rgba(35, 77, 32, 0.25);
-        }
-        
-        .process-step.left .step-number {
-          right: -16px;
-        }
-        
-        .process-step.right .step-number {
-          left: -16px;
-        }
-        
-        .step-image {
-          position: relative;
-          width: 100%;
-          height: 150px;
-          overflow: hidden;
-        }
-        
-        .process-step.left .step-image {
-          border-top-right-radius: 30px;
-        }
-        
-        .process-step.right .step-image {
-          border-top-left-radius: 30px;
-        }
-        
-        .step-image img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-          transition: transform 0.5s ease;
-        }
-        
-        .process-content:hover .step-image img {
-          transform: scale(1.05);
-        }
-        
-        .step-icon {
-          position: absolute;
-          bottom: 12px;
-          right: 12px;
-          background: rgba(38, 166, 91, 0.1);
-          color: #234d20;
-          width: 36px;
-          height: 36px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          font-size: 18px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .step-details {
-          padding: 20px;
-          flex: 1;
-        }
-        
-        .step-details h3 {
-          font-size: 20px;
-          font-weight: 600;
-          color: #234d20;
-          margin: 0 0 10px 0;
-          position: relative;
-          padding-bottom: 10px;
-          display: inline-block;
-        }
-        
-        .step-details h3::after {
+        .section-header::after {
           content: '';
           position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 40px;
+          bottom: -30px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80px;
           height: 3px;
-          background: #234d20;
+          background: linear-gradient(90deg, #10b981, #26a65b);
           border-radius: 3px;
         }
         
-        .step-details p {
-          font-size: 15px;
-          color: #555;
-          margin: 0;
-          line-height: 1.5;
-        }
-        
-        .cta-container {
-          text-align: center;
-          margin-top: 50px;
-        }
-        
-        .cta-button {
-          display: inline-block;
-          background: linear-gradient(135deg, #234d20, #26a65b);
-          color: #fff;
+        .section-header h3 {
+          color: #10b981;
+          font-size: 1rem;
           font-weight: 600;
-          font-size: 16px;
-          padding: 15px 32px;
-          border-radius: 10px;
-          text-decoration: none;
-          box-shadow: 0 8px 20px rgba(38, 166, 91, 0.25);
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          margin-bottom: 16px;
+          display: inline-block;
+          background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(38, 166, 91, 0.1));
+          padding: 8px 20px;
+          border-radius: 30px;
         }
         
-        .cta-button:before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, 
-            rgba(255, 255, 255, 0) 0%, 
-            rgba(255, 255, 255, 0.3) 50%, 
-            rgba(255, 255, 255, 0) 100%);
-          transition: all 0.6s ease;
+        .section-header h1 {
+          font-size: 3.5rem;
+          font-weight: 800;
+          color: #1f2937;
+          margin-bottom: 20px;
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+          line-height: 1.2;
+          font-family: "Playfair Display", Georgia, serif;
         }
         
-        .cta-button:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 12px 25px rgba(38, 166, 91, 0.3);
+        .section-header p {
+          font-size: 1.25rem;
+          color: #4b5563;
+          max-width: 700px;
+          margin-left: auto;
+          margin-right: auto;
+          line-height: 1.7;
         }
         
-        .cta-button:hover:before {
-          left: 100%;
+        .process-steps {
+          display: flex;
+          flex-direction: column;
+          gap: 160px;
         }
         
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+
+        .process-step.animate-in {
+          opacity: 1 !important;
+          transform: translateY(0) !important;
+        }
+
+        .image-container {
+          transition: transform 0.5s ease;
+        }
+        
+        .image-container:hover {
+          transform: translateY(-10px);
+        }
+
+        .image-container:hover .floating-bg {
+          filter: blur(48px);
+          opacity: 0.8;
+        }
+
+        .image-container:hover .main-image {
+          transform: translateY(-8px);
+          box-shadow: 0 35px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-container:hover .step-image {
+          transform: scale(1.05);
+        }
+
+        .cta-button:hover .button-overlay {
+          opacity: 1;
+        }
+
         @media (max-width: 1024px) {
-          .process-content {
-            width: 46%;
+          .process-step {
+            flex-direction: column !important;
           }
           
-          .section-header h2 {
-            font-size: 32px;
+          .section-header h1 {
+            font-size: 2.8rem;
+          }
+          
+          .process-steps {
+            gap: 120px;
           }
         }
-        
-        @media (max-width: 900px) {
-          .timeline-line,
-          .timeline-dot {
-            left: 20px;
+
+        @media (max-width: 768px) {
+          .farm-to-bottle-container {
+            padding: 80px 20px;
           }
           
-          .process-content {
-            width: calc(100% - 60px);
-            margin-left: auto !important;
-            margin-right: 0 !important;
+          .section-header {
+            margin-bottom: 80px;
           }
           
-          .process-step.left .step-number,
-          .process-step.right .step-number {
-            left: 5px;
-            right: auto;
-          }
-        }
-        
-        @media (max-width: 600px) {
-          .section-header h2 {
-            font-size: 28px;
+          .section-header h1 {
+            font-size: 2.2rem;
           }
           
           .section-header p {
-            font-size: 15px;
+            font-size: 1.1rem;
           }
           
-          .step-image {
-            height: 140px;
+          .process-steps {
+            gap: 100px;
           }
           
-          .step-details {
-            padding: 16px;
+          .image-container div {
+            max-width: 320px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .farm-to-bottle-container {
+            padding: 60px 15px;
           }
           
-          .step-details h3 {
-            font-size: 18px;
+          .section-header h1 {
+            font-size: 1.8rem;
           }
           
-          .step-details p {
-            font-size: 14px;
+          .image-container div {
+            max-width: 280px;
           }
           
-          .cta-button {
-            padding: 14px 26px;
-            font-size: 15px;
+          .process-steps {
+            gap: 80px;
           }
         }
       `}</style>
-    </section>
+    </div>
   );
-} 
+}
